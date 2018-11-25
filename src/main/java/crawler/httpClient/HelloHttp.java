@@ -21,13 +21,36 @@ import java.io.IOException;
 public class HelloHttp {
     public static void main(String[] args) {
 
+        test4();
+
+    }
+
+    public static void test4() {
+        CloseableHttpClient httpClient = HttpClients.createDefault();//创建httpClient实例
+        HttpGet httpGet = new HttpGet("http://www.csdn.net"); //创建httpGet实例
+        CloseableHttpResponse response = null;//指向http get请求
         try {
-            test3();
+            response = httpClient.execute(httpGet);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        HttpEntity entity = response.getEntity();//获取返回实体
+        System.out.println(entity.isRepeatable());//
+
+        try {
+            System.out.println("1:"+EntityUtils.toString(entity).substring(0,10));
+            System.out.println("2:"+EntityUtils.toString(entity).substring(0,10));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            response.close();
+            httpClient.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
 
     public static void test3() throws IOException{
@@ -101,9 +124,12 @@ public class HelloHttp {
 
         HttpEntity entity = response.getEntity();//获取返回实体
 
+
+        System.out.println(entity.isRepeatable());
+
         //System.out.println("网页内容："+ EntityUtils.toString(entity,"utf-8"));//获取网页内容
         System.out.println("Content-Type :"+entity.getContentType());//获取内容类型
-        System.out.println("Status : "+response.getStatusLine());//判断响应状态
+        System.out.println("Content-Type :"+entity.getContentType());
 
         response.close();
         httpClient.close();
