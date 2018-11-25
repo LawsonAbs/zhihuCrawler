@@ -1,4 +1,4 @@
-package crawler;
+package crawler.httpClient;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

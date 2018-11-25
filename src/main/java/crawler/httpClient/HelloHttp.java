@@ -20,9 +20,11 @@ import java.io.IOException;
  */
 public class HelloHttp {
     public static void main(String[] args) {
-
-        test4();
-
+        try {
+            test3();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void test4() {
@@ -55,14 +57,11 @@ public class HelloHttp {
 
     public static void test3() throws IOException{
         CloseableHttpClient httpClient = HttpClients.createDefault();//创建httpClient实例
-        HttpGet httpGet = new HttpGet("https://www.cnblogs.com/"); //创建httpGet实例
+        HttpGet httpGet = new HttpGet("http://www.xicidaili.com/"); //创建httpGet实例
 
-        HttpHost proxy = new HttpHost("114.235.22.147", 9000);
+
         RequestConfig config = RequestConfig
                 .custom()
-                .setProxy(proxy)
-                .setConnectTimeout(10000)//连接超时
-                .setSocketTimeout(10000)//读取超时
                 .build();
 
         httpGet.setHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; WOW64; rv:63.0) Gecko/20100101 Firefox/63.0");

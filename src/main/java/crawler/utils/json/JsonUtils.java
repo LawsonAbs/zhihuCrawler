@@ -1,4 +1,4 @@
-package utils.json;
+package crawler.utils.json;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -6,7 +6,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import utils.other.CustomedMethod;
+import crawler.utils.other.CustomedMethod;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -22,7 +22,6 @@ public class JsonUtils {
     //get a normal string by json string
     public static void main(String[] args) {
         JsonUtils jsonUtils = new JsonUtils();
-
         jsonUtils.getValue();
     }
 

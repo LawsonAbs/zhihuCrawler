@@ -1,4 +1,4 @@
-package utils.other;
+package crawler.utils.other;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

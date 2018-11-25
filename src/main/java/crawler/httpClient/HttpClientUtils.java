@@ -13,8 +13,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import utils.other.CustomedMethod;
-import utils.json.JsonUtils;
+import crawler.utils.other.CustomedMethod;
+import crawler.utils.json.JsonUtils;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -24,19 +24,18 @@ public class HttpClientUtils {
     private String dirPath = "E:\\intellij_Project\\zhihu_picture\\";
     //the url we get picture's url
     //private static List<String> topicUrl = new ArrayList<String>();
-    private static String topicUrl = "https://www.zhihu.com/api/v4/questions/23776164/answers?include=data[*].is_normal,admin_closed_comment,reward_info,is_collapsed,annotation_action,annotation_detail,collapse_reason,is_sticky,collapsed_by,suggest_edit,comment_count,can_comment,content,editable_content,voteup_count,reshipment_settings,comment_permission,created_time,updated_time,review_info,relevant_info,question,excerpt,relationship.is_authorized,is_author,voting,is_thanked,is_nothelp,is_labeled;data[*].mark_infos[*].url;data[*].author.follower_count,badge[*].topics&offset=0&limit=4&sort_by=created";
+    //private static String topicUrl = "https://www.zhihu.com/api/v4/questions/23776164/answers?include=data[*].is_normal,admin_closed_comment,reward_info,is_collapsed,annotation_action,annotation_detail,collapse_reason,is_sticky,collapsed_by,suggest_edit,comment_count,can_comment,content,editable_content,voteup_count,reshipment_settings,comment_permission,created_time,updated_time,review_info,relevant_info,question,excerpt,relationship.is_authorized,is_author,voting,is_thanked,is_nothelp,is_labeled;data[*].mark_infos[*].url;data[*].author.follower_count,badge[*].topics&offset=0&limit=4&sort_by=created";
+    private static String topicUrl = "https://www.zhihu.com/api/v4/questions/263952082/answers?include=data[*].is_normal,admin_closed_comment,reward_info,is_collapsed,annotation_action,annotation_detail,collapse_reason,is_sticky,collapsed_by,suggest_edit,comment_count,can_comment,content,editable_content,voteup_count,reshipment_settings,comment_permission,created_time,updated_time,review_info,relevant_info,question,excerpt,relationship.is_authorized,is_author,voting,is_thanked,is_nothelp,is_labeled;data[*].mark_infos[*].url;data[*].author.follower_count,badge[*].topics&offset=0&limit=4&sort_by=created";
     private static Set<String> pictureUrls = new HashSet<String>();
     //01.CloseableHttpClient is a abstract class => in order to use in all method
     private CloseableHttpClient httpClient = HttpClients.createDefault();
     private static JsonUtils jsonUtils = new JsonUtils();
-
 
     public static void main(String[] args) {
         HttpClientUtils httpClientUtils = new HttpClientUtils();
         //httpClientUtils.initial();
 
         Set<String> tempPictureUrls = null;
-        String tempUrl;
         //01.通过url获取entity
         boolean flag = false;
         while(!flag) {
@@ -51,7 +50,7 @@ public class HttpClientUtils {
                 pictureUrls.add(iterator.next()); // add the total set -> pictureUrl
             }
             try {
-                Thread.sleep(1000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -59,7 +58,7 @@ public class HttpClientUtils {
             topicUrl = jsonUtils.getNext(jsonString);
 
             //print the next url
-            CustomedMethod.printDelimiter(topicUrl);
+            //CustomedMethod.printDelimiter(topicUrl);
             //print the pictureUrl's size
             System.out.println(pictureUrls.size());
         }
@@ -71,7 +70,7 @@ public class HttpClientUtils {
             while (iterator.hasNext()) {
                 httpClientUtils.getPicture(iterator.next());
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(1500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -95,7 +94,7 @@ public class HttpClientUtils {
         //01. get pictureUrl
         pictureUrl  = jsonUtils.getPictureUrls();
         //02. output the
-        jsonUtils.outputUrl(pictureUrl);
+        //jsonUtils.outputUrl(pictureUrl);
         return pictureUrl;
     }
 
