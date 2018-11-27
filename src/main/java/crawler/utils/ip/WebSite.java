@@ -8,6 +8,16 @@ public abstract class WebSite implements FreeIP{
     private String webName;
     private String url;
     private String keyword;//the keyword to get the ip
+    private String charset;
+    private int page = 1;// the first page to visit
+
+    public String getCharset() {
+        return charset;
+    }
+
+    public void setCharset(String charset) {
+        this.charset = charset;
+    }
 
     public String getWebName() {
         return webName;
@@ -38,7 +48,7 @@ public abstract class WebSite implements FreeIP{
      * 01. get the web's next Url
      */
     public String getNextUrl(String prefix){
-        int page = 1;
+
         String nextUrl ;
         page ++;
         if(page > 10 ){// reset to 0

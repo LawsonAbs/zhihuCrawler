@@ -40,7 +40,7 @@ public class HttpClientUtils {
         boolean flag = false;
         while(!flag) {
             CustomedMethod.printDelimiter(topicUrl);
-            String jsonString = httpClientUtils.getEntityContent(topicUrl);
+            String jsonString = httpClientUtils.getEntityContent(topicUrl,"utf-8");
             tempPictureUrls = httpClientUtils.getImageUrlByJson(jsonString);
             flag = jsonUtils.isEnd(jsonString);
 
@@ -131,7 +131,7 @@ public class HttpClientUtils {
         return entity;
     }
 
-    public String getEntityContent(String url) {
+    public String getEntityContent(String url,String charset) {
         String jsonContent = null;
 
         //use get
@@ -157,7 +157,7 @@ public class HttpClientUtils {
         HttpEntity entity = response.getEntity();
 
         try {
-            jsonContent = EntityUtils.toString(entity, "utf-8");
+            jsonContent = EntityUtils.toString(entity, charset);
         } catch (IOException e) {
             e.printStackTrace();
         }

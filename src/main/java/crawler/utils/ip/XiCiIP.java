@@ -9,24 +9,24 @@ import org.jsoup.select.Elements;
 import crawler.utils.other.CustomedMethod;
 
 import java.util.HashSet;
-import java.util.Queue;
 import java.util.Set;
 
 public class XiCiIP extends  WebSite {
     private HttpClientUtils httpClientUtils = new HttpClientUtils();
     IPPort ipPort ;
 
-    public XiCiIP(IPPort ipPort, String url, String keyWord, String webName) {
+    public XiCiIP(IPPort ipPort, String url, String keyWord, String webName,String charset) {
         this.ipPort = ipPort;
         this.setUrl(url);
         this.setWebName(webName);
         this.setKeyword(keyWord);
+        this.setCharset(charset);
     }
 
     public Set<String> getFreeIpInSet() {
         //ipPort port,for example: 13.23.49.128 80
         Set<String> ipPortSet = new HashSet<String>();
-        String content = httpClientUtils.getEntityContent(this.getUrl());
+        String content = httpClientUtils.getEntityContent(this.getUrl(),this.getCharset());
         System.out.println("content "+content);
         Document document = Jsoup.parse(content);
 
@@ -60,7 +60,7 @@ public class XiCiIP extends  WebSite {
     public void getFreeIpInQueue() {
         int page = 1;
         //ipPort port,for example: 13.23.49.128 80
-        String content = httpClientUtils.getEntityContent(this.getUrl());
+        String content = httpClientUtils.getEntityContent(this.getUrl(),this.getCharset());
         System.out.println("content "+content);
         Document document = Jsoup.parse(content);
 

@@ -11,17 +11,18 @@ public class Main {
         String xiCiurl = "http://www.xicidaili.com/nn/1";
         String xiCiKeyWord = "ip_list";
         String xiCiWebName = "西刺代理";
-        XiCiIP xiCiIP = new XiCiIP(ipPort, xiCiurl, xiCiKeyWord, xiCiWebName);
+
+        XiCiIP xiCiIP = new XiCiIP(ipPort, xiCiurl, xiCiKeyWord, xiCiWebName,"utf-8");
 
         String cloudUrl = "http://www.ip3366.net/?stype=1&page=1";
         String cloudKeyWord = "list";
         String cloudWebName = "云代理";
-        CloudIP cloudIP = new CloudIP(ipPort, cloudUrl,cloudKeyWord,cloudWebName);
+        CloudIP cloudIP = new CloudIP(ipPort, cloudUrl,cloudKeyWord,cloudWebName,"gb2312");
 
 
         //get first thread
-        ProduceIPPort producer1 = new ProduceIPPort(xiCiIP);
-        producer1.run();
+//        ProduceIPPort producer1 = new ProduceIPPort(xiCiIP);
+//        producer1.run();
 
         //get second thread
         ProduceIPPort producer2 = new ProduceIPPort(cloudIP);

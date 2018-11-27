@@ -14,11 +14,12 @@ public class CloudIP extends WebSite{
     private HttpClientUtils httpClientUtils = new HttpClientUtils();
     IPPort ipPort ;
 
-    public CloudIP(IPPort ipPort, String url, String keyWord, String webName) {
+    public CloudIP(IPPort ipPort, String url, String keyWord, String webName,String charset) {
         this.ipPort = ipPort;
         this.setUrl(url);
         this.setKeyword(keyWord);
         this.setWebName(webName);
+        this.setCharset(charset);
     }
 
     public Set<String> getFreeIpInSet() {
@@ -27,8 +28,8 @@ public class CloudIP extends WebSite{
 
     public void getFreeIpInQueue() {
         //ipPort port,for example: 13.23.49.128 80
-        String content = httpClientUtils.getEntityContent(this.getUrl());
-        System.out.println("content "+content);
+        String content = httpClientUtils.getEntityContent(this.getUrl(),this.getCharset());
+        //System.out.println("content "+content);
         Document document = Jsoup.parse(content);
 
         Element ip_list = document.getElementById(this.getKeyword());
@@ -47,8 +48,8 @@ public class CloudIP extends WebSite{
 
             //if it not a efficient ipPort entry
             if(tds.size()<2)    continue;
-            ip = tds.get(1).text();
-            port = trEle.select("td").get(2).text();
+            ip = tds.get(0).text();
+            port = trEle.select("td").get(1).text();
             System.out.println("ipPort: " + ip + " port: "+port);
 
             //the synchronized to ipPort
@@ -56,11 +57,7 @@ public class CloudIP extends WebSite{
                 ipPort.getIpPortQueue().add(ip + " " + port);// add to set
             }
         }
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        System.out.println("IpPortQueue's size is: "+ipPort.getIpPortQueue().size());
         this.setUrl(this.getNextUrl("http://www.ip3366.net/?stype=1&page="));
         System.out.println("after update: "+this.getUrl());
     }

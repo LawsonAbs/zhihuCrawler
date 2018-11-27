@@ -33,7 +33,7 @@ public class IpUtils{
     public void getFreeIpByClass(WebSite webSite,IPPort ipPort) {
         Set<String> ipPortSet = new HashSet<String>();
         //the three website object
-        String content = httpClientUtils.getEntityContent(webSite.getUrl());
+        String content = httpClientUtils.getEntityContent(webSite.getUrl(),"utf-8");
         System.out.println("content "+content);
         Document document = Jsoup.parse(content);
 
