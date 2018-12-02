@@ -22,11 +22,21 @@ public class IpUtils{
     //urls' list
     private List<String> urls = new ArrayList<String>();
     private HttpClientUtils httpClientUtils = new HttpClientUtils();
+    private final String BAIDU = "www.baidu.com";
 
     public static void main(String[] args) {
-        IpUtils ipUtils = new IpUtils();
-    }
+        Set<String> pictureUrls = new HashSet<String>();
+        pictureUrls.add("1");
+        pictureUrls.add("2");
+        pictureUrls.add("3");
+        pictureUrls.add("4");
+        pictureUrls.add("5");
 
+        //pictureUrl is a list,so you must use get() rather than index to fetch a value
+        for(String imageUrl : pictureUrls) {
+            System.out.println(imageUrl);
+        }
+    }
 
     //the following function could get free ipPort by select class,but it couldn't get the all efficient ipPort
     @Deprecated
@@ -59,11 +69,25 @@ public class IpUtils{
     }
 
     //is it a ip?
-    public static boolean checkAddress(String s) {
+    public static boolean isAddress(String s) {
         return s.matches("((25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))");
     }
 
-    public Queue<String> getFreeIpInQueue(WebSite webSite){
-        return  null;
+    /**
+     *
+     * @param ipPort
+     * @return
+     */
+    public boolean isValidIpPort(String ipPort) {
+        return this.isValidIpPort(ipPort,BAIDU);
+    }
+
+    public boolean isValidIpPort(String ipPort,String url) {
+        String ip = ipPort.split(" ")[0];// get  ip
+        int port = Integer.parseInt(ipPort.split(" ")[1]);// get port
+        if(httpClientUtils.getEntityContentByProxy(url,ip,port,"utf-8")!=null){
+            return true;
+        }
+        return false;
     }
 }

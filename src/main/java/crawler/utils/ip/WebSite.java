@@ -11,6 +11,14 @@ public abstract class WebSite implements FreeIP{
     private String charset;
     private int page = 1;// the first page to visit
 
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
     public String getCharset() {
         return charset;
     }
@@ -58,4 +66,5 @@ public abstract class WebSite implements FreeIP{
         this.setUrl(nextUrl);//the url is a variable
         return  nextUrl;
     }
+
 }

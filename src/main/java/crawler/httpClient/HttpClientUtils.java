@@ -1,6 +1,7 @@
 package crawler.httpClient;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -20,12 +21,13 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+
 public class HttpClientUtils {
     private String dirPath = "E:\\intellij_Project\\zhihu_picture\\";
     //the url we get picture's url
     //private static List<String> topicUrl = new ArrayList<String>();
-    //private static String topicUrl = "https://www.zhihu.com/api/v4/questions/23776164/answers?include=data[*].is_normal,admin_closed_comment,reward_info,is_collapsed,annotation_action,annotation_detail,collapse_reason,is_sticky,collapsed_by,suggest_edit,comment_count,can_comment,content,editable_content,voteup_count,reshipment_settings,comment_permission,created_time,updated_time,review_info,relevant_info,question,excerpt,relationship.is_authorized,is_author,voting,is_thanked,is_nothelp,is_labeled;data[*].mark_infos[*].url;data[*].author.follower_count,badge[*].topics&offset=0&limit=4&sort_by=created";
-    private static String topicUrl = "https://www.zhihu.com/api/v4/questions/263952082/answers?include=data[*].is_normal,admin_closed_comment,reward_info,is_collapsed,annotation_action,annotation_detail,collapse_reason,is_sticky,collapsed_by,suggest_edit,comment_count,can_comment,content,editable_content,voteup_count,reshipment_settings,comment_permission,created_time,updated_time,review_info,relevant_info,question,excerpt,relationship.is_authorized,is_author,voting,is_thanked,is_nothelp,is_labeled;data[*].mark_infos[*].url;data[*].author.follower_count,badge[*].topics&offset=0&limit=4&sort_by=created";
+
+    private static String topicUrl = "https://www.zhihu.com/api/v4/questions/31123603/answers?include=data[*].is_normal,admin_closed_comment,reward_info,is_collapsed,annotation_action,annotation_detail,collapse_reason,is_sticky,collapsed_by,suggest_edit,comment_count,can_comment,content,editable_content,voteup_count,reshipment_settings,comment_permission,created_time,updated_time,review_info,relevant_info,question,excerpt,relationship.is_authorized,is_author,voting,is_thanked,is_nothelp,is_labeled;data[*].mark_infos[*].url;data[*].author.follower_count,badge[*].topics&offset=0&limit=4&sort_by=created";
     private static Set<String> pictureUrls = new HashSet<String>();
     //01.CloseableHttpClient is a abstract class => in order to use in all method
     private CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -44,36 +46,31 @@ public class HttpClientUtils {
             tempPictureUrls = httpClientUtils.getImageUrlByJson(jsonString);
             flag = jsonUtils.isEnd(jsonString);
 
-
             Iterator<String> iterator = tempPictureUrls.iterator();
             while (iterator.hasNext()) {
                 pictureUrls.add(iterator.next()); // add the total set -> pictureUrl
             }
             try {
-                Thread.sleep(2000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-            topicUrl = jsonUtils.getNext(jsonString);
-
             //print the next url
-            //CustomedMethod.printDelimiter(topicUrl);
-            //print the pictureUrl's size
+            topicUrl = jsonUtils.getNext(jsonString);
             System.out.println(pictureUrls.size());
         }
 
+        //print the pictureUrl's size
+        System.out.println(pictureUrls.size());
+
         //pictureUrl is a list,so you must use get() rather than index to fetch a value
         for(String imageUrl : pictureUrls) {
-            System.out.println(imageUrl);
-            Iterator<String> iterator = tempPictureUrls.iterator();
-            while (iterator.hasNext()) {
-                httpClientUtils.getPicture(iterator.next());
-                try {
-                    Thread.sleep(1500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            //System.out.println(imageUrl);
+            httpClientUtils.getPicture(imageUrl);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -136,7 +133,6 @@ public class HttpClientUtils {
 
         //use get
         HttpGet httpGet = new HttpGet(url);
-        // HttpHost proxy = new HttpHost("115.153.146.73", 8060);
 
         RequestConfig config = RequestConfig
                 .custom()
@@ -251,4 +247,76 @@ public class HttpClientUtils {
         }
         return null;
     }
+
+
+
+
+//=========================================use proxy ip==================================================
+
+    //get html entity from specific url
+    public HttpEntity getEntityByProxt(String url,String ip,int port) {
+        //use get
+        HttpGet httpGet = new HttpGet(url);
+        HttpHost proxy = new HttpHost(ip, port);
+
+        RequestConfig config = RequestConfig
+                .custom()
+                .setProxy(proxy)
+                .setConnectTimeout(1000)//连接超时
+                .setSocketTimeout(1000)//读取超时
+                .build();
+        httpGet.setConfig(config);
+        httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:63.0) Gecko/20100101 Firefox/63.0");
+
+        //get the request's response
+        CloseableHttpResponse response = null;
+        try {
+            response = httpClient.execute(httpGet);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        HttpEntity entity = response.getEntity();
+        return entity;
+    }
+
+    public String getEntityContentByProxy(String url,String ip, int port,String charset) {
+        String jsonContent = null;
+
+        //use get
+        HttpGet httpGet = new HttpGet(url);
+        HttpHost proxy = new HttpHost(ip, port);
+
+        RequestConfig config = RequestConfig
+                .custom()
+                .setProxy(proxy)
+                .setConnectTimeout(1000)//连接超时
+                .setSocketTimeout(1000)//读取超时
+                .build();
+        httpGet.setConfig(config);
+        httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:63.0) Gecko/20100101 Firefox/63.0");
+
+        //get the request's response
+        CloseableHttpResponse response = null;
+        try {
+            response = httpClient.execute(httpGet);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        HttpEntity entity = response.getEntity();
+
+        try {
+            jsonContent = EntityUtils.toString(entity, charset);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return jsonContent;
+    }
+
+
+    //get picture from specific url
+    public void getPictureByProxy(String url,String ip,int port) {
+        HttpEntity entity = this.getEntityByProxt(url,ip,port);
+        this.writeImageInDisk(entity);//write image to Disk
+    }
 }
+
